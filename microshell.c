@@ -30,7 +30,7 @@ int	exec(int argc, char **argv, char **env, int pFlag)
 			return (p("error: fatal\n"));
 		argv[argc] = NULL;
 		if (!strcmp(argv[0], "cd"))
-			return (cd(argc, &argv[1]));
+			return (cd(argc, &argv[1]), exit(1), 1);
 		else
 			return (execve(argv[0], argv, env), p("error: cannot execute "), p(argv[0]), p("\n"), exit(1), 1);
 	}
