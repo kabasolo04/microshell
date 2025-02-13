@@ -49,7 +49,8 @@ int	main(int argc, char **argv, char **env)
 		int	j = i;
 		while (argv[i] && strcmp(argv[i], "|") && strcmp(argv[i], ";"))
 			i ++;
-		status = exec(i - j, &argv[j], env, (argv[i] && !strcmp(argv[i], "|")));
+		if (i != j)
+			status = exec(i - j, &argv[j], env, (argv[i] && !strcmp(argv[i], "|")));
 	}
 	return (WIFEXITED(status) && WEXITSTATUS(status));
 }
