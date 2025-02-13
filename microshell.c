@@ -22,6 +22,8 @@ int	exec(int argc, char **argv, char **env, int pFlag)
 	int	pid;
 	int	status;
 
+	if (!strcmp(argv[0], "cd"))
+		return (cd(argc, &argv[1]));
 	if (pFlag && pipe(fd) == -1)
 		return (p("error: fatal\n"));
 	if ((pid = fork()) == 0)
@@ -29,10 +31,7 @@ int	exec(int argc, char **argv, char **env, int pFlag)
 		if (pFlag && (dup2(fd[1], STDOUT_FILENO) == -1 || close(fd[0]) == -1 || close(fd[1]) == -1))
 			return (p("error: fatal\n"));
 		argv[argc] = NULL;
-		if (!strcmp(argv[0], "cd"))
-			return (cd(argc, &argv[1]), exit(1), 1);
-		else
-			return (execve(argv[0], argv, env), p("error: cannot execute "), p(argv[0]), p("\n"), exit(1), 1);
+		return (execve(argv[0], argv, env), p("error: cannot execute "), p(argv[0]), p("\n"), exit(1), 1);
 	}
 	waitpid(pid, &status, 0);
 	if (pFlag && (dup2(fd[0], STDIN_FILENO) == -1 || close(fd[0]) == -1 || close(fd[1]) == -1))
